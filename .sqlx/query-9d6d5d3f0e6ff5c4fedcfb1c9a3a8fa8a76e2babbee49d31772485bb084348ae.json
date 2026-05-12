@@ -1,0 +1,60 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT cert_hash, issuer_hash, issuer_cn, not_before, not_after, sans, registered_domains\n           FROM certs\n           WHERE registered_domains && ARRAY[$1]::TEXT[]\n             AND not_before >= $2\n           ORDER BY not_before DESC\n           LIMIT $3",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "cert_hash",
+        "type_info": "Bytea"
+      },
+      {
+        "ordinal": 1,
+        "name": "issuer_hash",
+        "type_info": "Bytea"
+      },
+      {
+        "ordinal": 2,
+        "name": "issuer_cn",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "not_before",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 4,
+        "name": "not_after",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 5,
+        "name": "sans",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 6,
+        "name": "registered_domains",
+        "type_info": "TextArray"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Timestamptz",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "9d6d5d3f0e6ff5c4fedcfb1c9a3a8fa8a76e2babbee49d31772485bb084348ae"
+}

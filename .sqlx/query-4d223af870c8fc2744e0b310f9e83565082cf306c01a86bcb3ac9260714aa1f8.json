@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE ingest_cursors\n           SET last_tree_size = $2, last_updated = now()\n           WHERE log_id = $1 AND last_tree_size < $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Bytea",
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4d223af870c8fc2744e0b310f9e83565082cf306c01a86bcb3ac9260714aa1f8"
+}

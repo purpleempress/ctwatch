@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO cert_names (name, registered_domain, cert_hash, not_before)\n                       VALUES ($1, $2, $3, $4)\n                       ON CONFLICT DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Bytea",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2f44061329fea61d0da81fac5e8ae330671450520a40bcb34982800178023db6"
+}

@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO names_observed (name, registered_domain, first_seen, last_seen, cert_count)\n           VALUES ($1, $2, $3, $3, 1)\n           ON CONFLICT (name) DO UPDATE\n             SET last_seen = excluded.last_seen,\n                 cert_count = names_observed.cert_count + 1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e128e14ab47e98306fffceae6688f588dd8aa8719bd61153944165a1bedbbfe3"
+}

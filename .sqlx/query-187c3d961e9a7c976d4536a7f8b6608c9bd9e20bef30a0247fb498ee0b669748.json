@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE backfill_jobs SET status = 'completed', completed_at = now() WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "187c3d961e9a7c976d4536a7f8b6608c9bd9e20bef30a0247fb498ee0b669748"
+}

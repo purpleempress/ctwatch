@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "DELETE FROM watchlist WHERE domain = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "a124652f2ff6e9b070c3af90717e3651966fa929a385d57a0d56edcca2b7060e"
+}

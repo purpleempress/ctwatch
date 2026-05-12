@@ -1,0 +1,7 @@
+/target
+/deploy/data
+/deploy/.env
+/deploy/docker-compose.override.yml
+/deploy/docker-compose.test.yml
+*.swp
+.DS_Store

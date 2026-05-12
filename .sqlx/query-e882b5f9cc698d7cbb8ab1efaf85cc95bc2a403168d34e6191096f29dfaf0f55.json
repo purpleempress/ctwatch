@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO ingest_cursors (log_id, log_url, operator, last_tree_size, last_updated, state)\n           VALUES ($1, $2, $3, 0, now(), 'usable')\n           ON CONFLICT (log_id) DO UPDATE\n             SET log_url = excluded.log_url,\n                 operator = excluded.operator,\n                 last_updated = now()",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Bytea",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "e882b5f9cc698d7cbb8ab1efaf85cc95bc2a403168d34e6191096f29dfaf0f55"
+}

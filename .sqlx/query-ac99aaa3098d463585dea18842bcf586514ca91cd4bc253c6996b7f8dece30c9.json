@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE ingest_cursors SET state = $2 WHERE log_id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Bytea",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ac99aaa3098d463585dea18842bcf586514ca91cd4bc253c6996b7f8dece30c9"
+}

@@ -1,0 +1,25 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO backfill_jobs\n             (log_id, target_since, target_start_index, target_end_index, progress_index)\n           VALUES ($1, $2, $3, $4, $3)\n           RETURNING id",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Bytea",
+        "Timestamptz",
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "9d14ca6b0e0881c345c414ee2984aec7b4dd187fa2e9aa3f8d6f713bdea32b8a"
+}

@@ -1,0 +1,58 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT cert_hash, issuer_hash, issuer_cn, not_before, not_after, sans, registered_domains\n           FROM certs WHERE cert_hash = $1 ORDER BY not_before DESC LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "cert_hash",
+        "type_info": "Bytea"
+      },
+      {
+        "ordinal": 1,
+        "name": "issuer_hash",
+        "type_info": "Bytea"
+      },
+      {
+        "ordinal": 2,
+        "name": "issuer_cn",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "not_before",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 4,
+        "name": "not_after",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 5,
+        "name": "sans",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 6,
+        "name": "registered_domains",
+        "type_info": "TextArray"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Bytea"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "60640fb2f10d52b33830dd55e8c2b037552431c9971b3b181b66ee48d101206d"
+}

@@ -1,0 +1,59 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT id, log_id, target_since, target_start_index, target_end_index, progress_index, status\n           FROM backfill_jobs\n           WHERE log_id = $1 AND target_since = $2 AND status = 'running'\n           LIMIT 1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "log_id",
+        "type_info": "Bytea"
+      },
+      {
+        "ordinal": 2,
+        "name": "target_since",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 3,
+        "name": "target_start_index",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 4,
+        "name": "target_end_index",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 5,
+        "name": "progress_index",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 6,
+        "name": "status",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Bytea",
+        "Timestamptz"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "9515863acf7dd065b75dfa1edce09153844fd8c4084e90663f35b712ed81fb66"
+}

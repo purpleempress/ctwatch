@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE webhook_outbox\n           SET attempts = attempts + 1,\n               last_attempt = now(),\n               last_status = $2,\n               next_attempt = $3\n           WHERE id = $1",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int4",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "2822283f67c4c604298ebbee89f204eaa86aee3de5812b7f10ea1cd7b3647ee2"
+}

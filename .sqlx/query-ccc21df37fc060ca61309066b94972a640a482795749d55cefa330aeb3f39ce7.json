@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO watchlist (domain, notes) VALUES ($1, $2)\n           ON CONFLICT (domain) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ccc21df37fc060ca61309066b94972a640a482795749d55cefa330aeb3f39ce7"
+}

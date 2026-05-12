@@ -1,0 +1,20 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO certs (cert_hash, issuer_hash, issuer_cn, not_before, not_after, sans, registered_domains)\n               VALUES ($1, $2, $3, $4, $5, $6, $7)\n               ON CONFLICT (cert_hash, not_before) DO NOTHING",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Bytea",
+        "Bytea",
+        "Text",
+        "Timestamptz",
+        "Timestamptz",
+        "TextArray",
+        "TextArray"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "582368aaead915f48476f367bab9bc76285d2c5f81a6360e489ca66b787791b9"
+}

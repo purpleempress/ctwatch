@@ -1,0 +1,52 @@
+name: ctwatch
+
+services:
+  db:
+    image: timescale/timescaledb:2.17.2-pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ctwatch
+      POSTGRES_USER: ctwatch
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set in .env}
+    volumes:
+      - ./data/pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "ctwatch", "-d", "ctwatch"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  ctwatch:
+    build:
+      context: ../
+      dockerfile: deploy/Dockerfile
+    image: ctwatch:local
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgres://ctwatch:${DB_PASSWORD}@db:5432/ctwatch"
+      LISTEN_ADDR: "0.0.0.0:8080"
+      LOG_OPERATORS: ${LOG_OPERATORS:-*}
+      RETENTION_DAYS_HOT: ${RETENTION_DAYS_HOT:-90}
+      RETENTION_DAYS_COLD: ${RETENTION_DAYS_COLD:-400}
+      WATCHLIST_MODE: ${WATCHLIST_MODE:-db}
+      WATCHLIST_FILE: ${WATCHLIST_FILE:-}
+      WATCHLIST_URL: ${WATCHLIST_URL:-}
+      WATCHLIST_REFRESH: ${WATCHLIST_REFRESH:-60s}
+      WEBHOOK_URL: ${WEBHOOK_URL:-}
+      WEBHOOK_HMAC_SECRET: ${WEBHOOK_HMAC_SECRET:-}
+      WEBHOOK_MAX_ATTEMPTS: ${WEBHOOK_MAX_ATTEMPTS:-7}
+      STREAM_ENABLED: ${STREAM_ENABLED:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    volumes:
+      - ./data/config:/etc/ctwatch:ro
+    ports:
+      - "127.0.0.1:8080:8080"
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ctwatch", "healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
