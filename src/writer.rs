@@ -1,5 +1,5 @@
 use anyhow::Result;
-use chrono::Utc;
+use chrono::{Duration, Utc};
 use sha2::{Digest, Sha256};
 use sqlx::PgPool;
 use tokio::sync::mpsc;
@@ -31,6 +31,7 @@ pub fn spawn(
     counters: Counters,
     stream_tx: CertEventSender,
     capacity: usize,
+    retention_days_hot: u32,
 ) -> WriterHandle {
     let (tx, mut rx) = mpsc::channel::<WriterJob>(capacity);
     tokio::spawn(async move {
@@ -50,7 +51,16 @@ pub fn spawn(
             }
             counters.set_queue_depth(rx.len() as i64);
 
-            if let Err(e) = flush_batch(&pool, &matcher, &counters, &stream_tx, &batch).await {
+            if let Err(e) = flush_batch(
+                &pool,
+                &matcher,
+                &counters,
+                &stream_tx,
+                &batch,
+                retention_days_hot,
+            )
+            .await
+            {
                 tracing::error!("writer flush: {e:#}");
             }
         }
@@ -64,10 +74,12 @@ async fn flush_batch(
     counters: &Counters,
     stream_tx: &CertEventSender,
     batch: &[WriterJob],
+    retention_days_hot: u32,
 ) -> Result<()> {
     let mut cert_rows: Vec<certs::CertRow> = Vec::with_capacity(batch.len());
     let mut events: Vec<CertEvent> = Vec::with_capacity(batch.len());
     let now = Utc::now();
+    let cutoff = now - Duration::days(retention_days_hot as i64);
 
     for job in batch {
         let (precert_der, _tbs) = match (&job.entry.kind, &job.entry.precert_der) {
@@ -79,6 +91,14 @@ async fn flush_batch(
         let Ok(parsed) = parse_cert(&precert_der) else {
             continue;
         };
+        // Skip certs whose not_before is already past retention. Inserting them
+        // creates hypertable chunks immediately eligible for the retention policy,
+        // which races with the compression policy and floods the DB log with
+        // "chunk deleted by other transaction" errors.
+        if parsed.not_before < cutoff {
+            counters.incr_dups(1);
+            continue;
+        }
         let regdoms = parsed.registered_domains.clone();
 
         cert_rows.push(certs::CertRow {

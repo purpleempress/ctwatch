@@ -35,7 +35,14 @@ pub async fn run(args: BackfillArgs) -> Result<()> {
     counters.spawn_ticker();
     let (stream_tx, _rx) = stream::channel(cfg.stream_max_lag.max(64));
     let matcher = watchlist::Matcher::new(); // empty; matches won't fire during backfill
-    let writer = writer::spawn(pool.clone(), matcher, counters.clone(), stream_tx, 10_000);
+    let writer = writer::spawn(
+        pool.clone(),
+        matcher,
+        counters.clone(),
+        stream_tx,
+        10_000,
+        cfg.retention_days_hot,
+    );
 
     let client = reqwest::Client::builder().build()?;
     let all = log_list::fetch_log_list(&client, &cfg.log_list_url).await?;

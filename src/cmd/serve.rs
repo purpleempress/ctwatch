@@ -57,6 +57,7 @@ pub async fn run() -> Result<()> {
         counters.clone(),
         stream_tx.clone(),
         10_000,
+        cfg.retention_days_hot,
     );
 
     if let (Some(url), Some(secret)) = (cfg.webhook_url.clone(), cfg.webhook_hmac_secret.clone()) {

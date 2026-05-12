@@ -52,6 +52,21 @@ async fn tick(
 ) -> Result<bool> {
     let cursor = current_cursor(pool, &log.log_id).await?;
     let sth = client.get_sth(&log.url).await?;
+
+    // First run for this log: skip to the head of the tree instead of replaying
+    // the entire log from index 0. Backfilling history is the job of
+    // `ctwatch backfill`, which uses the same writer pipeline.
+    if cursor == 0 && sth.tree_size > 0 {
+        cursors::advance(pool, &log.log_id, sth.tree_size as i64).await?;
+        tracing::info!(
+            operator = %log.operator,
+            url = %log.url,
+            tree_size = sth.tree_size,
+            "new log; cursor set to current STH"
+        );
+        return Ok(false);
+    }
+
     if (sth.tree_size as i64) <= cursor {
         return Ok(false);
     }

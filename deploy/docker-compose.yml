@@ -43,7 +43,7 @@ services:
     volumes:
       - ./data/config:/etc/ctwatch:ro
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8084:8080"
     healthcheck:
       test: ["CMD", "/usr/local/bin/ctwatch", "healthcheck"]
       interval: 30s
